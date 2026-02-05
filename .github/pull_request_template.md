@@ -9,6 +9,6 @@
 [Provide clear instructions on how to test the changes locally.]
 
 ### Checklist:
-- [ ] Clear title and description
-- [ ] Documentation/README updated if needed
-- [ ] No secrets or large temporary files
+- [ ] Clear title and description.
+- [ ] Documentation/README updated if needed.
+- [ ] No secrets or large temporary files.
