@@ -1,8 +1,6 @@
 name: Lab 3 - Manual Workflow
 
 on:
-  push:
-    branches: [ feature/lab3 ]
   workflow_dispatch:
     inputs:
       logLevel:
