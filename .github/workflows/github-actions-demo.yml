@@ -1,18 +1,114 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Lab 3 - Manual Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+          - info
+          - warning
+          - debug
+      print_tags:
+        description: 'True to print to STDOUT'
+        required: true
+        type: boolean
+      tags:
+        description: 'Test scenario tags'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
+
 jobs:
-  Explore-GitHub-Actions:
+  print-tag:
     runs-on: ubuntu-latest
+    if: ${{ inputs.print_tags }}
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v5
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Display all workflow inputs
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          echo "========================================"
+          echo "WORKFLOW INPUT PARAMETERS"
+          echo "========================================"
+          echo "Log Level: ${{ inputs.logLevel }}"
+          echo "Print Tags: ${{ inputs.print_tags }}"
+          echo "Tags: ${{ inputs.tags }}"
+          echo "Environment: ${{ inputs.environment }}"
+          echo "========================================"
+      
+      - name: Print the input tag to STDOUT
+        run: echo "The tags are ${{ inputs.tags }}"
+      
+      - name: Display trigger information
+        run: |
+          echo "========================================"
+          echo "TRIGGER INFORMATION"
+          echo "========================================"
+          echo "Trigger event: ${{ github.event_name }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "========================================"
+      
+      - name: Gather system information
+        run: |
+          echo ""
+          echo "========================================"
+          echo "SYSTEM INFORMATION"
+          echo "========================================"
+          
+          echo ""
+          echo "--- RUNNER INFORMATION ---"
+          echo "Runner name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner architecture: ${{ runner.arch }}"
+          echo "Runner temp directory: ${{ runner.temp }}"
+          echo "Runner tool cache: ${{ runner.tool_cache }}"
+          
+          echo ""
+          echo "--- OPERATING SYSTEM DETAILS ---"
+          cat /etc/os-release
+          
+          echo ""
+          echo "--- HARDWARE SPECIFICATIONS ---"
+          echo "CPU Model: $(lscpu | grep 'Model name' | cut -d':' -f2 | xargs)"
+          echo "CPU Cores: $(nproc)"
+          echo "CPU Architecture: $(uname -m)"
+          echo "Total Memory: $(free -h | grep 'Mem:' | awk '{print $2}')"
+          echo "Available Memory: $(free -h | grep 'Mem:' | awk '{print $7}')"
+          echo "Disk Size: $(df -h / | tail -1 | awk '{print $2}')"
+          echo "Disk Usage: $(df -h / | tail -1 | awk '{print $5}')"
+          
+          echo ""
+          echo "========================================"
+      
+      - name: Process based on log level
+        run: |
+          echo "========================================"
+          echo "PROCESSING WITH LOG LEVEL: ${{ inputs.logLevel }}"
+          echo "========================================"
+          
+          if [ "${{ inputs.logLevel }}" == "debug" ]; then
+            echo "Debug mode: Showing detailed information"
+            echo "Current directory: $(pwd)"
+            echo "Files in repository:"
+            ls -la
+            echo "Environment variables:"
+            env | sort
+          elif [ "${{ inputs.logLevel }}" == "info" ]; then
+            echo "Info mode: Showing basic information"
+            echo "Current time: $(date)"
+            echo "Current user: $(whoami)"
+          else
+            echo "Warning mode: Only showing warnings"
+            echo "No warnings detected"
+          fi
+          echo "========================================"
