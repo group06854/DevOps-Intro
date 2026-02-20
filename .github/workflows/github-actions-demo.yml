@@ -1,0 +1,45 @@
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Triggered by ${{ github.event_name }}"
+
+      - name: Check out repository code
+        uses: actions/checkout@v5
+
+      - name: System info
+        run: |
+          echo ""
+          echo "========================================"
+          echo "SYSTEM INFORMATION"
+          echo "========================================"
+          
+          echo ""
+          echo "--- RUNNER INFORMATION ---"
+          echo "Runner name: ${{ runner.name }}"
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner architecture: ${{ runner.arch }}"
+          
+          echo ""
+          echo "--- OPERATING SYSTEM DETAILS ---"
+          cat /etc/os-release
+          
+          echo ""
+          echo "--- HARDWARE SPECIFICATIONS ---"
+          echo "CPU Model: $(lscpu | grep 'Model name' | cut -d':' -f2 | xargs)"
+          echo "CPU Cores: $(nproc)"
+          echo "CPU Architecture: $(uname -m)"
+          echo "Total Memory: $(free -h | grep 'Mem:' | awk '{print $2}')"
+          echo "Available Memory: $(free -h | grep 'Mem:' | awk '{print $7}')"
+          echo "Disk Size: $(df -h / | tail -1 | awk '{print $2}')"
+          echo "Disk Usage: $(df -h / | tail -1 | awk '{print $5}')"
+          
+          echo ""
+          echo "========================================"
