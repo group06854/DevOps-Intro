@@ -1,7 +1,7 @@
 name: Lab 3 - Manual Workflow
 
 on:
-  push
+  push:
   workflow_dispatch:
 
 jobs:
